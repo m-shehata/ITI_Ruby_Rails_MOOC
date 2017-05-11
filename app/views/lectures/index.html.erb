@@ -1,0 +1,46 @@
+<p id="notice">
+	<%= notice %>
+</p>
+
+<h1>Listing Lectures</h1>
+
+<table>
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Content</th>
+			<th>Attachment</th>
+			<th>Course</th>
+			<th>Instructor</th>
+			<th colspan="3"></th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<% @lectures.each do |lecture| %>
+		<tr>
+			<td><%= lecture.title %></td>
+			<td><%= lecture.content %></td>
+			<td><%= link_to 'Download', lecture.attachment_url %></td>
+			<td><%= lecture.course.try(:title) %></td>
+			<td><%= lecture.user.try(:name) %></td>
+			<td><%= link_to like_lecture_path(lecture), method: :put do %>Upvote
+			<%= lecture.get_upvotes.size %>
+			<% end %> </td>
+			<td> <%= link_to dislike_lecture_path(lecture), method: :put do %>
+			Downvote
+			<%= lecture.get_downvotes.size %>
+			<% end %> </td>
+			<td><%= link_to 'Show', lecture %></td>
+			<% if current_user.try(:superadmin?) %>
+			<td><%= link_to 'Edit', edit_lecture_path(lecture) %></td>
+			<td><%= link_to 'Destroy', lecture, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+			<% end %>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Lecture', new_lecture_path %>
