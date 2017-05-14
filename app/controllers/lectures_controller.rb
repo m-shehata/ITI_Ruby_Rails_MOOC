@@ -1,5 +1,5 @@
 class LecturesController < InheritedResources::Base
-
+load_and_authorize_resource
   # def show
   # @comment = Comment.new
   # end
@@ -18,12 +18,14 @@ class LecturesController < InheritedResources::Base
   end
 
   def upvote
+    authorize! :upvote, Lecture
     @lecture = Lecture.find(params[:id])
     @lecture.upvote_by current_user
     redirect_to :back
   end
 
   def downvote
+    authorize! :downvote, Lecture
     @lecture = Lecture.find(params[:id])
     @lecture.downvote_by current_user
     redirect_to :back

@@ -1,71 +1,192 @@
-<p id="notice">
-	<%= notice %>
-</p>
+<!DOCTYPE html>
+<html lang="en">
 
-<p>
-	<strong>Title:</strong>
-	<%= @lecture.title %>
-</p>
+	<head>
 
-<p>
-	<strong>Content:</strong>
-	<%= raw (@lecture.content) %>
-</p>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
 
-<p>
-	<strong>Attachment:</strong>
-	<%= link_to @lecture.attachment_identifier, @lecture.attachment_url %>
-</p>
+		<title></title>
+	</head>
 
-<p>
-	<strong>Course:</strong>
-	<%= @lecture.course.try(:title) %>
-</p>
+	<body>
 
-<p>
-	<strong>Instructor:</strong>
-	<%= @lecture.user.try(:name) %>
-</p>
+		<!-- Page Content -->
+		<div class="container">
 
-<p>
-	<strong>Comments:</strong>
-	<% if @lecture.comments.count > 0 %>
-	<ul>
-		<% @lecture.comments.each do |c| %>
-		<li>
-			<strong><%= c.user.try(:name) %></strong>
-		</li>
-		<%= c.content %>
-		<% end %>
-	</ul>
-	<% else %>
-	<span>This lecture hasn't any comment yet. Be the first to add one.</span>
-</p>
-<% end %>
-<div>
-	<h3>Add a comment</h3>
-	<% if user_signed_in? %>
-	<%= form_for([@lecture, @lecture.comments.build]) do |f| %>
-	<p>
-		<%= f.label :user_id %>
-		<br>
-		<%= f.text_field :user_id , :disabled=>true , :value=>current_user.try(:name)%>
-	</p>
-	<p>
-		<%= f.label :content %>
-		<br>
-		<%= f.text_area :content %>
-	</p>
-	<p>
-		<%= f.submit %>
-	</p>
-	<% end %>
-	<% else %>
-	<p>
-		Please <b><%= link_to('Login', new_user_session_path) %></b> to leave a comment.
-	</p>
-	<% end %>
-</div>
+			<div class="row">
 
-<%= link_to 'Edit', edit_lecture_path(@lecture) %> |
-<%= link_to 'Back', lectures_path %>
+				<!-- Blog Post Content Column -->
+				<div class="col-lg-8">
+
+					<!-- Blog Post -->
+
+					<!-- Title -->
+					<h1><%= @lecture.title %></h1>
+
+					<!-- Author -->
+					<p class="lead">
+						by <%= @lecture.user.try(:name) %>  |  <% if @lecture.user == current_user %>
+						(<%= link_to 'Edit Lecture', edit_lecture_path(@lecture) %>)
+					<% end %>
+					</p>
+
+					<hr>
+
+					<!-- Date/Time -->
+					<p>
+						<span class="glyphicon glyphicon-time"></span> Posted on <%= @lecture.created_at %>
+						<%= link_to(image_tag('like-flat.png', size: "30"), like_lecture_path(@lecture), method: :put) %>
+						(<%= @lecture.get_upvotes.size %>)
+						<%= link_to(image_tag('spam.gif', size: "30", class: "pull-right"),dislike_lecture_path(@lecture), method: :put) %>
+					</p>
+
+					<hr>
+
+					<!-- Preview Image -->
+					<img class="img-responsive" src="http://placehold.it/900x300" alt="">
+
+					<hr>
+
+					<!-- Post Content -->
+					<p class="lead">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?
+					</p>
+					<%= raw (@lecture.content) %>
+
+					<hr>
+
+					<!-- Blog Comments -->
+
+					<!-- Comments Form -->
+					<div class="well">
+						<h4>Leave a Comment:</h4>
+						<% if user_signed_in? %>
+						<%= form_for([@lecture, @lecture.comments.build]) do |f| %>
+						<!-- <form role="form"> -->
+						<div class="form-group">
+							<%= f.text_area :content, :class=>"form-control", :rows=>3%>
+						</div>
+						<%= f.submit "Submit", :class=>"btn btn-primary"%>
+						<button type="submit" class="btn btn-primary">
+							Submit
+						</button>
+						<% end %>
+						<% else %>
+						<p>
+							Please <b><%= link_to('Login', new_user_session_path) %></b> to leave a comment.
+						</p>
+						<% end %>
+						<!-- </form> -->
+					</div>
+
+					<hr>
+
+					<!-- Posted Comments -->
+
+					<!-- Comment -->
+					<% if @lecture.comments.count > 0 %>
+					<% @lecture.comments.each do |c| %>
+					<div class="media">
+						<% if c.user.try(:attachment).try(:file).nil?%>
+						<%= image_tag("http://placehold.it/64x64", class: "media-object pull-left", size: "64")%>
+						<% else %>
+						<%= image_tag(c.user.try(:attachment), class: "media-object pull-left", size: "64") %>
+						<% end %>
+						<!-- <a class="pull-left" href="#"> <img class="media-object" src="http://placehold.it/64x64" alt=""> </a> -->
+						<div class="media-body">
+							<h4 class="media-heading"><%= c.user.try(:name) %> <small><%= c.created_at %></small></h4>
+							<%= c.content %>
+						</div>
+					</div>
+					<% end %>
+					<% else %>
+					<span>This lecture hasn't any comment yet. Be the first to add one.</span>
+					<% end %>
+
+				</div>
+
+				<!-- Blog Sidebar Widgets Column -->
+				<div class="col-md-4">
+
+					<!-- Blog Search Well -->
+					<div class="well">
+						<h4>Blog Search</h4>
+						<div class="input-group">
+							<input type="text" class="form-control">
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button">
+									<span class="glyphicon glyphicon-search"></span>
+								</button> </span>
+						</div>
+						<!-- /.input-group -->
+					</div>
+
+					<!-- Blog Categories Well -->
+					<div class="well">
+						<h4>Available Courses</h4>
+						<div class="row">
+							<div class="col-lg-6">
+								<ul class="list-unstyled">
+									<% Course.all.each do |c| %>
+									<li>
+										<%= link_to c.title, c %>
+									</li>
+									<% end %>
+								</ul>
+							</div>
+							<div class="col-lg-6">
+								<ul class="list-unstyled">
+									<li></li>
+
+								</ul>
+							</div>
+						</div>
+						<!-- /.row -->
+					</div>
+
+					<!-- Side Widget Well -->
+					<div class="well">
+						<h4>Attached files:</h4>
+						<% if @lecture.attachment_url %>
+						<p>
+							<%= link_to "Download", @lecture.attachment_url %>
+						</p>
+						<% else %>
+						<p>
+							No downloadable resources available for "<%= @lecture.title %>" lecture.
+						</p>
+						<% end %>
+					</div>
+
+				</div>
+
+			</div>
+			<!-- /.row -->
+
+			<hr>
+
+			<!-- Footer -->
+			<footer>
+				<div class="row">
+					<div class="col-lg-12">
+						<p>
+							Copyright &copy; Your Website 2014
+						</p>
+					</div>
+				</div>
+				<!-- /.row -->
+			</footer>
+
+		</div>
+		<!-- /.container -->
+
+		<!-- Bootstrap Core JavaScript -->
+		<script src="js/bootstrap.min.js"></script>
+
+	</body>
+
+</html>

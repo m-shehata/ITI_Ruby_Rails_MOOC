@@ -18,8 +18,8 @@ ActiveAdmin.register User do
   form do |f|
     f.inputs "User Details" do
       f.input :name
-      f.input :gender
-      f.input :role
+      f.input :gender, as: :select, collection: (["Male", "Female"]),default: "Male",  include_blank: false
+      f.input :role, as: :select, collection: (["Student", "Instructor","Administrator"]), include_blank: false, allow_blank: false
       f.input :email
       f.input :date_of_birth
       f.input :password

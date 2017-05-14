@@ -1,10 +1,10 @@
 class CommentsController < InheritedResources::Base
-
+load_and_authorize_resource
   def create
     # First way
     # create a comment then push it in the relation
     # @comment = Comment.new(comment_params)
-    # @comment.user = current_user
+    # @comment.user = current_userload_and_authorize_resource
     # @lecture = Lecture.find(params[:lecture_id])
     # @lecture.comments << @comment
 

@@ -29,9 +29,11 @@
   </div>
   <div class="field">
     <%= f.label :user_id %><br>
-    <%= f.label current_user.name %><br>
+    <%= f.label current_user.try(:name) %><br>
   </div>
   <div class="actions">
     <%= f.submit %>
   </div>
+  
 <% end %>
+<%= javascript_include_tag 'ck_' %>

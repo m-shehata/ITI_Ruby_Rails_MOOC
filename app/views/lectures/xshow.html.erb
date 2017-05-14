@@ -1,0 +1,70 @@
+<p id="notice">
+	<%= notice %>
+</p>
+
+<p>
+	<strong>Title:</strong>
+	<%= @lecture.title %>
+</p>
+
+<p>
+	<strong>Content:</strong>
+	<%= raw (@lecture.content) %>
+</p>
+
+<p>
+	<strong>Attachment:</strong>
+	<%= link_to @lecture.attachment_identifier, @lecture.attachment_url %>
+</p>
+
+<p>
+	<strong>Course:</strong>
+	<%= @lecture.course.try(:title) %>
+</p>
+
+<p>
+	<strong>Instructor:</strong>
+	<%= @lecture.user.try(:name) %>
+</p>
+
+<p>
+	<strong>Comments:</strong>
+	<% if @lecture.comments.count > 0 %>
+	<ul>
+		<% @lecture.comments.each do |c| %>
+		<li>
+			<strong><%= c.user.try(:name) %></strong>
+		</li>
+		<%= c.content %>
+		<% end %>
+	</ul>
+	<% else %>
+	<span>This lecture hasn't any comment yet. Be the first to add one.</span>
+</p>
+<% end %>
+<div>
+	<h3>Add a comment</h3>
+	<% if user_signed_in? %>
+	<%= form_for([@lecture, @lecture.comments.build]) do |f| %>
+	<p>
+		<%= f.label :user_id %>
+		<br>
+		<%= f.text_field :user_id , :disabled=>true , :value=>current_user.try(:name)%>
+	</p>
+	<p>
+		<%= f.label :content %>
+		<br>
+		<%= f.text_area :content %>
+	</p>
+	<p>
+		<%= f.submit %>
+	</p>
+	<% end %>
+	<% else %>
+	<p>
+		Please <b><%= link_to('Login', new_user_session_path) %></b> to leave a comment.
+	</p>
+	<% end %>
+</div>
+<%= link_to 'Edit', edit_lecture_path(@lecture) %> |
+<%= link_to 'Back', lectures_path %>
