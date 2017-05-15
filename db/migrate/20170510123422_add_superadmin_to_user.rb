@@ -3,8 +3,10 @@ class AddSuperadminToUser < ActiveRecord::Migration
     add_column :users, :superadmin, :boolean, :null => false, :default => false
 
     User.create! do |r|
+      r.name 	   = 'Mohamed Shehata'
       r.email      = 'default@example.com'
       r.password   = 'password'
+      r.role	   = 'Administrator'
       r.superadmin = true
     end
   end
