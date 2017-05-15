@@ -5,11 +5,29 @@ one:
   date_of_birth: 2017-05-10
   gender: MyString
   role: MyString
+  email: one@example.com
   attachment: MyString
 
-two:
-  name: MyString
+user_without_name:
+  # name: MyString
   date_of_birth: 2017-05-10
   gender: MyString
   role: MyString
+  email: two@example.com
   attachment: MyString
+
+<% 30.times do |n| %>
+user_<%= n %>:
+  name: <%= "user#{n}" %>
+  date_of_birth: 2017-05-10
+  gender: Male
+  <% if n <= 10%>
+  role: Student
+  <% elsif n <= 20%>
+  role: Instructor
+  <% else %>
+  role: Administrator
+  superadmin: true
+  <% end %>
+  email: <%= "user#{n}@example.com" %>
+<% end %>

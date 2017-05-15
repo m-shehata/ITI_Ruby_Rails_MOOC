@@ -18,10 +18,10 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#">Start Bootstrap</a>
+					<a class="navbar-brand" href="#">Coursera</a>
 				</div>
 				<!-- Collect the nav links, forms, and other content for toggling -->
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
 						<li>
 							<%= link_to "Courses", courses_path %>
@@ -29,21 +29,31 @@
 						<li>
 							<%= link_to "Lectures", lectures_path%>
 						</li>
-						<li>
-							<%= link_to "Courses", courses_path%>
+
+					</ul>
+
+					<!-- Right nav bar links -->
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <% if user_signed_in?%>
+							<%= current_user.try(:name) %>
+							<% else %>Account
+							<% end %> <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<%= render 'devise/menu/registration_items' %>
+								<li role="separator" class="divider"></li>
+								<%= render 'devise/menu/login_items' %>
+							</ul>
 						</li>
 					</ul>
+
 				</div>
 				<!-- /.navbar-collapse -->
 			</div>
 			<!-- /.container -->
 		</nav>
-
-		<ul class="hmenu">
-			<%= render 'devise/menu/registration_items' %>
-			<%= render 'devise/menu/login_items' %>
-		</ul>
-		<%= yield %>
-
+		<div class="container">
+			<%= yield %>
+		</div>
 	</body>
 </html>

@@ -10,6 +10,7 @@ class Ability
       elsif user.role == "Instructor"
         can :create, [Course, Lecture, Comment]
         can [:update, :destroy], Lecture, user_id: user.id
+        can [:upvote, :downvote], Lecture
         can :read, :all
       elsif user.role == "Student"
         can :create, Comment

@@ -8,4 +8,7 @@ class User < ActiveRecord::Base
   has_many :lectures, through: :comments
   GENDER_TYPES = ["Male", "Female"]
   mount_uploader :attachment, ImageUploader
+  validates :name, presence: true
+  validates :email, presence: true, uniqueness: true
+  
 end
