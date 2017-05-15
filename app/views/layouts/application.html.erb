@@ -40,6 +40,10 @@
 							<% else %>Account
 							<% end %> <span class="caret"></span></a>
 							<ul class="dropdown-menu">
+								<%if current_user.try(:superadmin?)%>
+								<li><%= link_to 'Manage Site', admin_root_url %></li>
+								<li role="separator" class="divider"></li>
+								<% end %>
 								<%= render 'devise/menu/registration_items' %>
 								<li role="separator" class="divider"></li>
 								<%= render 'devise/menu/login_items' %>
